@@ -14,5 +14,5 @@ find_library(JPEG_LIB NAMES libjpeg jpeg)
 include_directories(/usr/include /usr/local/include /opt/local/include)
 
 add_executable(jpegedge ${JPEGEDGE_SOURCE_FILES})
-target_link_libraries(jpegedge ${JPEG_LIB})
+target_link_libraries(jpegedge ${JPEG_LIB} m)
 install(TARGETS jpegedge DESTINATION bin)
