@@ -5,7 +5,7 @@
 #include <math.h>
 #include <sys/sysinfo.h>
 #include <omp.h>
-#include <time.h>
+#include <sys/time.h>
 
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
@@ -226,13 +226,13 @@ int main(int argc, char **argv) {
     /** Create Output Image in RAM **/
     struct rgb_image *output_image = create_output_image(input_image);
 
-    struct timespec begin, end;
-    clock_gettime(CLOCK_MONOTONIC, &begin);
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
     /** Apply Filter **/
     apply_filter(input_image, output_image, numDPthreads);
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    double filterTime = (10.0E+9 * (end.tv_sec - begin.tv_sec) + (end.tv_nsec - begin.tv_nsec)) / 10.0E+9;
-    fprintf(stderr, "%lf\n", filterTime);
+    gettimeofday(&end, NULL);
+    printf("elapsed: %.2lf\n", ((1000000.0 * (end.tv_sec - start.tv_sec) +
+          (1.0 * (end.tv_usec - start.tv_usec)))/1000000.0));
 
     /** Save Output Image **/
     write_output_image(output_image, argv[2]);
